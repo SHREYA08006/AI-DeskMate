@@ -86,9 +86,9 @@ AVATAR_EMOJIS = {
 }
 
 try:
-    from app.paths import get_db_path, get_config_path
+    from app.paths import get_db_path, get_config_path, is_frozen
 except (ImportError, ValueError):
-    from ..paths import get_db_path, get_config_path
+    from ..paths import get_db_path, get_config_path, is_frozen
 
 is_demo_mode = os.environ.get("DESKMATE_DEMO_MODE") == "1" or "--demo" in sys.argv
 
@@ -287,7 +287,7 @@ with st.container():
             })
 
             # 3. Spawn companion process
-            cmd = [sys.executable, "-m", "app.main", "--companion"]
+            cmd = [sys.executable, "--companion"] if is_frozen() else [sys.executable, "-m", "app.main", "--companion"]
             if is_demo_mode:
                 cmd.append("--demo")
 
