@@ -125,13 +125,10 @@ class DeskMateApp:
 
     def _show_onboarding(self):
         try:
-            onboarding = OnboardingWindow(config_mgr=self.config_mgr, on_complete=self._on_onboarding_completed)
+            onboarding = OnboardingWindow(config_mgr=self.config_mgr)
             onboarding.mainloop()
         except Exception as e:
             logger.error(f"Error in onboarding window: {e}")
-            self._start_main_app()
-
-    def _on_onboarding_completed(self):
         logger.info('Onboarding completed! Launching companion overlay...')
         self._start_main_app(trigger_welcome=True)
 
@@ -163,8 +160,9 @@ class DeskMateApp:
             t_sched = threading.Thread(target=self._auto_trigger_loop, daemon=True, name='AutoTriggerLoop')
             t_sched.start()
 
-            if trigger_welcome:
-                self.overlay.after(1000, lambda: self.show_nudge('energy_checkin', minutes=0))
+            # Always show a friendly initial checkin 2.5s after launch to verify avatar is live
+            init_delay = 1000 if trigger_welcome else 2500
+            self.overlay.after(init_delay, lambda: self.show_nudge('energy_checkin', minutes=0))
 
             if "--sample-nudge" in sys.argv:
                 self.overlay.after(2000, self._trigger_sample_nudge)
@@ -311,28 +309,21 @@ class DeskMateApp:
         sys.exit(0)
 
 def main():
-    if "--dashboard" in sys.argv:
-        if __package__ is None or __package__ == '':
-            from app.dashboard.launcher import main as launcher_main
-        else:
-            from .dashboard.launcher import main as launcher_main
-        launcher_main()
+    is_companion = "--companion" in sys.argv or "--avatar" in sys.argv or "--avatar-only" in sys.argv
+
+    # If --companion or --avatar is requested, start the desktop companion overlay
+    if is_companion:
+        is_demo = "--demo" in sys.argv
+        app = DeskMateApp(is_demo=is_demo)
+        app.start()
         return
 
-    is_demo = "--demo" in sys.argv
-    is_companion = "--companion" in sys.argv or "--avatar-only" in sys.argv
-
-    # If neither --dashboard nor --companion is passed, open Dashboard first!
-    if not is_companion:
-        if __package__ is None or __package__ == '':
-            from app.dashboard.launcher import launch_dashboard
-        else:
-            from .dashboard.launcher import launch_dashboard
-        launch_dashboard(demo=is_demo, open_browser=True)
-        return
-
-    app = DeskMateApp(is_demo=is_demo)
-    app.start()
+    # By default, open the Analytics Dashboard & Command Center at http://localhost:8501
+    if __package__ is None or __package__ == '':
+        from app.dashboard.launcher import main as launcher_main
+    else:
+        from .dashboard.launcher import main as launcher_main
+    launcher_main()
 
 if __name__ == '__main__':
     main()

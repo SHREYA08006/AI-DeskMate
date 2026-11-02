@@ -20,6 +20,24 @@ from ..paths import get_bundle_dir, get_db_path, is_frozen
 logger = logging.getLogger("deskmate.dashboard_launcher")
 
 
+def is_port_available(port: int) -> bool:
+    """Check if a specific port is free on 127.0.0.1."""
+    with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+        try:
+            s.bind(('127.0.0.1', port))
+            return True
+        except OSError:
+            return False
+
+
+def get_default_port() -> int:
+    """Return standard Streamlit port 8501 if available, otherwise find free port."""
+    for p in [8501, 8502, 8503]:
+        if is_port_available(p):
+            return p
+    return find_free_port()
+
+
 def find_free_port() -> int:
     """Find and return an available ephemeral TCP port on 127.0.0.1."""
     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
@@ -57,7 +75,7 @@ def get_dashboard_script_path() -> str:
 def launch_dashboard(port: int = None, demo: bool = False, open_browser: bool = True):
     """Run Streamlit dashboard programmatically via streamlit.web.bootstrap."""
     if port is None or port <= 0:
-        port = find_free_port()
+        port = get_default_port()
 
     script_path = get_dashboard_script_path()
     if not os.path.exists(script_path):
@@ -79,8 +97,13 @@ def launch_dashboard(port: int = None, demo: bool = False, open_browser: bool = 
         'global.developmentMode': False
     }
 
-    url = f"http://127.0.0.1:{port}"
+    url = f"http://localhost:{port}"
     logger.info(f"Launching Streamlit dashboard on {url} (demo={demo})...")
+    print("\n" + "=" * 65, flush=True)
+    print("  AI DeskMate - Command Center & Analytics Dashboard", flush=True)
+    print(f"  [>] Dashboard Link: {url}", flush=True)
+    print("  Configure your companion & click 'Launch Avatar' in your browser!", flush=True)
+    print("=" * 65 + "\n", flush=True)
 
     if open_browser:
         import threading

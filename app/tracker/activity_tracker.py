@@ -9,6 +9,27 @@ from ..utils_logging import get_logger
 
 logger = get_logger("tracker")
 
+if sys.platform == 'win32':
+    import ctypes
+
+    class LASTINPUTINFO(ctypes.Structure):
+        _fields_ = [("cbSize", ctypes.c_uint), ("dwTime", ctypes.c_uint)]
+
+    def get_system_idle_seconds() -> Optional[float]:
+        try:
+            lii = LASTINPUTINFO()
+            lii.cbSize = ctypes.sizeof(LASTINPUTINFO)
+            if ctypes.windll.user32.GetLastInputInfo(ctypes.byref(lii)):
+                millis = (ctypes.windll.kernel32.GetTickCount() - lii.dwTime) & 0xFFFFFFFF
+                return max(0.0, millis / 1000.0)
+        except Exception:
+            pass
+        return None
+else:
+    def get_system_idle_seconds() -> Optional[float]:
+        return None
+
+
 try:
     from pynput import keyboard, mouse
     PYNPUT_AVAILABLE = True
@@ -219,7 +240,14 @@ class ActivityTracker:
         with self._lock:
             keys = self._key_count
             mouse_events = self._mouse_count
-            idle = max(0.0, now - self._last_event_time)
+            hook_idle = max(0.0, now - self._last_event_time)
+            sys_idle = get_system_idle_seconds() if self._running else None
+            if sys_idle is not None:
+                idle = min(hook_idle, sys_idle)
+                if sys_idle < hook_idle:
+                    self._last_event_time = now - sys_idle
+            else:
+                idle = hook_idle
 
             # AFK & Break handling (consistent with features.py: idle >= 180s / 3m counts as break)
             if idle >= self.afk_break_threshold_sec:
@@ -277,7 +305,14 @@ class ActivityTracker:
     def get_current_stats(self) -> Dict[str, Any]:
         with self._lock:
             now_t = time.time()
-            idle = max(0.0, now_t - self._last_event_time)
+            hook_idle = max(0.0, now_t - self._last_event_time)
+            sys_idle = get_system_idle_seconds() if self._running else None
+            if sys_idle is not None:
+                idle = min(hook_idle, sys_idle)
+                if sys_idle < hook_idle:
+                    self._last_event_time = now_t - sys_idle
+            else:
+                idle = hook_idle
             keys = self._key_count
             mouse = self._mouse_count
             cont_active_min = round(self._continuous_active_sec / 60.0, 1)

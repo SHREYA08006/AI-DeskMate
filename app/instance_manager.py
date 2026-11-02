@@ -141,6 +141,29 @@ class InstanceManager:
         except Exception as e:
             logger.warning(f"Failed to write heartbeat: {e}")
 
+    def stop_running_instance(self) -> bool:
+        """Terminates currently running companion instance if alive and releases lock."""
+        stopped = False
+        if os.path.exists(self.lock_file):
+            try:
+                with open(self.lock_file, "r", encoding="utf-8") as f:
+                    data = json.load(f)
+                old_pid = data.get("pid")
+                if old_pid and self._is_pid_running(old_pid):
+                    import psutil
+                    proc = psutil.Process(old_pid)
+                    proc.terminate()
+                    try:
+                        proc.wait(timeout=3)
+                    except Exception:
+                        proc.kill()
+                    stopped = True
+            except Exception as e:
+                logger.warning(f"Error terminating running instance: {e}")
+            finally:
+                self.release_lock()
+        return stopped
+
     def release_lock(self):
         """Marks clean exit and cleans up lock."""
         self.update_heartbeat(clean_exit=True)
