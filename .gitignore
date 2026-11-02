@@ -1,0 +1,50 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+*.pyc
+
+# C extensions
+*.so
+
+# Distribution / Packaging / PyInstaller
+build/temp/
+build/deskmate/
+dist/
+*.egg-info/
+.eggs/
+*.manifest
+*.spec.bak
+
+# Unit test / Testing cache
+.pytest_cache/
+.coverage
+htmlcov/
+.deskmate_test_data/
+
+# Virtual Environments
+.venv/
+env/
+venv/
+ENV/
+
+# Environment variables & secrets
+.env
+.env.local
+.env.*.local
+
+# Application Runtime Logs, Locks & Heartbeats
+*.log
+logs/
+*.lock
+heartbeat.json
+
+# OS specific files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Editor directories (optional / personal)
+.vscode/
+.idea/
+
