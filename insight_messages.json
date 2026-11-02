@@ -1,0 +1,110 @@
+﻿{
+    "energy_drop": {
+        "chill": [
+            "{avatar_name} noticed your energy rating drops by {pct}% after 90+ minutes of continuous work.",
+            "Heads up from {avatar_name}: your battery dips by about {pct}% when sessions pass 90 uninterrupted minutes."
+        ],
+        "strict": [
+            "Data confirms: energy levels degrade by {pct}% during work blocks exceeding 90 minutes. Breaks are required.",
+            "Performance analysis: {avatar_name} records a {pct}% drop in energy following 90+ min continuous typing."
+        ],
+        "cheerful": [
+            "Fun fact from {avatar_name}! Taking a stretch before 90 minutes prevents an energy dip of {pct}%! ✨",
+            "Superstar insight! {avatar_name} sees your sparkle stays {pct}% higher when you pause before the 90-minute mark! 💖"
+        ],
+        "sarcastic": [
+            "Shocking revelation: human energy drops {pct}% after 90 minutes of desk hypnosis. Who could have guessed?",
+            "Your energy drops by {pct}% after 90 minutes of nonstop staring. {avatar_name} recommends actual rest."
+        ]
+    },
+    "best_day": {
+        "chill": [
+            "{day_name}s tend to be your most productive day of the week with {avatar_name}.",
+            "You seem to find your smoothest groove on {day_name}s, {user_name}."
+        ],
+        "strict": [
+            "Output metrics indicate {day_name} is your highest-velocity production day.",
+            "Protocol review: maximum activity volume consistently occurs on {day_name}."
+        ],
+        "cheerful": [
+            "Woohoo! {day_name}s are your superstar power days with {avatar_name}! 🚀",
+            "You bring so much awesome energy every {day_name}, {user_name}! 🌟"
+        ],
+        "sarcastic": [
+            "{day_name} is your top work day. Try not to use up your entire weekly ambition at once.",
+            "Look at {user_name} on {day_name}s: actually getting things done. {avatar_name} is amazed."
+        ]
+    },
+    "peak_dip_hours": {
+        "chill": [
+            "Your energy peaks around {peak_hour}:00 and dips around {dip_hour}:00 — great times to sync your routine.",
+            "Rhythm check: you feel most charged near {peak_hour}:00 and naturally slow down around {dip_hour}:00."
+        ],
+        "strict": [
+            "Circadian analysis: peak stamina occurs at {peak_hour}:00; predictable cognitive dip recorded at {dip_hour}:00.",
+            "Schedule alignment: assign demanding tasks near {peak_hour}:00 and mandatory recovery at {dip_hour}:00."
+        ],
+        "cheerful": [
+            "Your superpower window shines at {peak_hour}:00, and a cozy recharge helps most at {dip_hour}:00! ☀️",
+            "{avatar_name} loves seeing your sparkle high at {peak_hour}:00! Let's recharge around {dip_hour}:00! ✨"
+        ],
+        "sarcastic": [
+            "Your brain operates at full capacity around {peak_hour}:00 and enters sleep mode around {dip_hour}:00.",
+            "At {peak_hour}:00 you're a genius, by {dip_hour}:00 you're a vegetable. Plan accordingly, {user_name}."
+        ]
+    },
+    "adherence_pattern": {
+        "chill": [
+            "You act on {best_type} {best_pct}% of the time, while {worst_type}s are often dismissed.",
+            "Pattern noticed by {avatar_name}: {best_type} works well for you ({best_pct}%), but {worst_type} gets skipped."
+        ],
+        "strict": [
+            "Adherence discrepancy: {best_type} compliance is {best_pct}%, whereas {worst_type} is frequently bypassed.",
+            "Accountability audit: high acceptance on {best_type} ({best_pct}%), deficient adherence on {worst_type}."
+        ],
+        "cheerful": [
+            "You're a champ at {best_type} ({best_pct}% positive)! Let's share some love for {worst_type} too! 🌟",
+            "High five for rocking {best_type} {best_pct}% of the time with {avatar_name}! 🎉"
+        ],
+        "sarcastic": [
+            "You actually listen to {best_type} {best_pct}% of the time, while {worst_type} goes straight into the void.",
+            "Breaking: {best_type} is popular with {user_name} ({best_pct}%), but {worst_type} is completely ignored."
+        ]
+    },
+    "flow_protection": {
+        "chill": [
+            "{avatar_name} held back {count} nudges to protect your flow state over this period.",
+            "Quiet focus preserved: {avatar_name} delayed {count} alerts while you were in deep typing flow."
+        ],
+        "strict": [
+            "Flow guardian report: {count} non-critical interruptions suppressed during verified focus streams.",
+            "Protocol execution: {count} nudges withheld to prevent disruption of continuous typing states."
+        ],
+        "cheerful": [
+            "{avatar_name} guarded your super focus and held back {count} nudges while you were in the zone! 🛡️✨",
+            "Deep work unlocked! {avatar_name} protected your flow by pausing {count} reminders! 🚀"
+        ],
+        "sarcastic": [
+            "{avatar_name} restrained itself from interrupting you {count} times while you were in the zone.",
+            "You were typing so furiously that {avatar_name} bit its tongue {count} times."
+        ]
+    },
+    "model_vs_rules": {
+        "chill": [
+            "Smart fatigue predictions were accepted {model_pct}% of the time compared to {rule_pct}% for standard timers.",
+            "Model accuracy check: you responded to AI fatigue nudges ({model_pct}%) vs fixed timer nudges ({rule_pct}%)."
+        ],
+        "strict": [
+            "Predictive efficacy: ML-driven fatigue triggers achieved {model_pct}% compliance vs {rule_pct}% heuristic baseline.",
+            "Model verification: predictive nudges outperform baseline schedule ({model_pct}% vs {rule_pct}% adherence)."
+        ],
+        "cheerful": [
+            "Our AI companion is learning! You welcomed fatigue alerts {model_pct}% of the time vs {rule_pct}% on timers! 💖",
+            "Awesome teamwork with {avatar_name}! Smart fatigue nudges hit {model_pct}% acceptance! 🎉"
+        ],
+        "sarcastic": [
+            "The AI predictor reached {model_pct}% acceptance vs {rule_pct}% for naive timers. The robots are learning.",
+            "You agree with {avatar_name}'s fatigue sensor {model_pct}% of the time, proving you actually get tired."
+        ]
+    }
+}

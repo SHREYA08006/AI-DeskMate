@@ -1,0 +1,142 @@
+{
+    "trained_at": "2026-09-19T19:45:28.807137",
+    "selected_model_type": "decision_tree",
+    "feature_columns": [
+        "hour_of_day",
+        "day_of_week",
+        "avg_keys_per_min",
+        "avg_mouse_events_per_min",
+        "avg_idle_seconds",
+        "time_since_last_break_min",
+        "continuous_active_min",
+        "app_switch_frequency",
+        "is_in_flow_ratio"
+    ],
+    "class_labels": [
+        "low_fatigue",
+        "medium_fatigue",
+        "high_fatigue"
+    ],
+    "metrics": {
+        "accuracy": 0.375,
+        "weighted_f1": 0.3666666666666667,
+        "cv_mean_accuracy": 0.7961538461538462,
+        "confusion_matrix": [
+            [
+                4,
+                0,
+                0
+            ],
+            [
+                4,
+                0,
+                0
+            ],
+            [
+                0,
+                6,
+                2
+            ]
+        ],
+        "classification_report": {
+            "low_fatigue": {
+                "precision": 0.5,
+                "recall": 1.0,
+                "f1-score": 0.6666666666666666,
+                "support": 4.0
+            },
+            "medium_fatigue": {
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1-score": 0.0,
+                "support": 4.0
+            },
+            "high_fatigue": {
+                "precision": 1.0,
+                "recall": 0.25,
+                "f1-score": 0.4,
+                "support": 8.0
+            },
+            "accuracy": 0.375,
+            "macro avg": {
+                "precision": 0.5,
+                "recall": 0.4166666666666667,
+                "f1-score": 0.35555555555555557,
+                "support": 16.0
+            },
+            "weighted avg": {
+                "precision": 0.625,
+                "recall": 0.375,
+                "f1-score": 0.3666666666666667,
+                "support": 16.0
+            }
+        }
+    },
+    "heuristic_baseline": {
+        "accuracy": 0.5,
+        "weighted_f1": 0.3333333333333333,
+        "confusion_matrix": [
+            [
+                0,
+                0,
+                4
+            ],
+            [
+                0,
+                0,
+                4
+            ],
+            [
+                0,
+                0,
+                8
+            ]
+        ],
+        "accuracy_delta_pct": -12.5,
+        "verdict": "The rule-based heuristic performs robustly on this sample (50.0% vs model 37.5%)."
+    },
+    "feature_importance_ranking": [
+        {
+            "feature": "hour_of_day",
+            "importance": 0.4805
+        },
+        {
+            "feature": "continuous_active_min",
+            "importance": 0.1766
+        },
+        {
+            "feature": "time_since_last_break_min",
+            "importance": 0.1154
+        },
+        {
+            "feature": "avg_keys_per_min",
+            "importance": 0.1082
+        },
+        {
+            "feature": "day_of_week",
+            "importance": 0.0779
+        },
+        {
+            "feature": "avg_mouse_events_per_min",
+            "importance": 0.0227
+        },
+        {
+            "feature": "avg_idle_seconds",
+            "importance": 0.0186
+        },
+        {
+            "feature": "app_switch_frequency",
+            "importance": 0.0
+        },
+        {
+            "feature": "is_in_flow_ratio",
+            "importance": 0.0
+        }
+    ],
+    "dataset": {
+        "train_samples": 64,
+        "test_samples": 16,
+        "train_path": "C:\\Users\\HIND\\.gemini\\antigravity\\scratch\\ai-deskmate\\data\\training_data.csv",
+        "test_path": "C:\\Users\\HIND\\.gemini\\antigravity\\scratch\\ai-deskmate\\data\\test_data.csv"
+    }
+}

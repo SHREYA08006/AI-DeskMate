@@ -1,0 +1,210 @@
+{
+    "break_reminder": {
+        "chill": [
+            "Hey {user_name}, it's {avatar_name} — you've been at it for {minutes} min straight. Quick stretch?",
+            "Take a breath, {user_name}. {avatar_name} suggests stepping away for a couple of minutes.",
+            "{user_name}, time flows fast! You've been locked in for {minutes} min. How about standing up with {avatar_name}?",
+            "{avatar_name} here — gentle reminder that {user_name} has earned a small break after {minutes} minutes."
+        ],
+        "strict": [
+            "{user_name}! You have been working for {minutes} continuous minutes. {avatar_name} says step away from the desk immediately.",
+            "Break time is mandatory, {user_name}. {avatar_name} insists you stand up and rest your eyes right now.",
+            "Productivity drops without rest, {user_name}. Step away for at least 5 minutes — {avatar_name} is watching.",
+            "No excuses, {user_name}. {minutes} minutes of screen time reached. {avatar_name} orders a break."
+        ],
+        "cheerful": [
+            "Woohoo, {user_name}! You've been on fire for {minutes} mins! 🎉 Let's celebrate with a mini stretch break with {avatar_name}!",
+            "Time for a happy wiggle break, {user_name}! {avatar_name} is ready for some fresh air!",
+            "You're doing amazing work today, {user_name}! {avatar_name} suggests a refreshing 5-minute pause!",
+            "{avatar_name} is so proud of {user_name}'s effort! Let's recharge those awesome energy batteries! ✨"
+        ],
+        "sarcastic": [
+            "Breaking news: {user_name} has been glued to the chair for {minutes} minutes. Should {avatar_name} call search and rescue?",
+            "{user_name}, your keyboard is begging {avatar_name} for mercy after {minutes} min. Give it (and yourself) a break.",
+            "I know sitting like a statue is fun, {user_name}, but {avatar_name} thinks your spine disagrees.",
+            "Are you trying to set a world record for unbroken desk time, {user_name}? {avatar_name} says take five."
+        ]
+    },
+    "water_reminder": {
+        "chill": [
+            "{user_name}, hydration check! {avatar_name} thinks it's water o'clock 💧",
+            "Time for a cool sip of water, {user_name}. {avatar_name} says stay refreshed!",
+            "Hey {user_name}, grab your water glass — {avatar_name} reminds you that small sips keep the mind clear.",
+            "Hydration station time, {user_name}. {avatar_name} will wait while you drink some water."
+        ],
+        "strict": [
+            "{user_name}, hydrate immediately. {avatar_name} notes brain performance drops by 10% when dehydrated.",
+            "Drink water now, {user_name}. {avatar_name} will not accept dehydration excuses.",
+            "{user_name}: water intake is required by {avatar_name}. Go refill your glass.",
+            "Stop what you're doing and drink a full glass of water, {user_name}. {avatar_name} is tracking."
+        ],
+        "cheerful": [
+            "Glug glug time! 🌊 Grab that water, {user_name}! {avatar_name} is cheering for healthy habits!",
+            "Hydration power-up! 💧 Drink some refreshing water with {avatar_name}, {user_name}!",
+            "A sparkling glass of water makes everything brighter, {user_name}! {avatar_name} says cheers! 🥤",
+            "{avatar_name} loves water and wants {user_name} to take a big hydrating sip together!"
+        ],
+        "sarcastic": [
+            "Unless you're part cactus, {user_name}, {avatar_name} suggests you drink some water.",
+            "{user_name}, dust is coming out of your mouth. {avatar_name} demands you hydrate before you mummify.",
+            "Your cells called {avatar_name} — they would like some H2O right now, {user_name}.",
+            "Drink water, {user_name}. Don't make {avatar_name} turn on the emergency sprinkler system."
+        ]
+    },
+    "posture_check": {
+        "chill": [
+            "Psst {user_name}, {avatar_name} asks: how's your posture right now? Shoulders back and relax!",
+            "{avatar_name} here — check in with your neck and shoulders, {user_name}. Unclench and breathe.",
+            "Gentle posture nudge from {avatar_name}: roll your shoulders and sit tall, {user_name}.",
+            "Feel that slight slump, {user_name}? {avatar_name} suggests taking a moment to adjust your chair and spine."
+        ],
+        "strict": [
+            "{user_name}, straighten your spine immediately. No slouching on {avatar_name}'s watch.",
+            "Correct your ergonomics right now, {user_name}. {avatar_name} requires back flat, feet on floor.",
+            "{user_name}: align your head with your spine. {avatar_name} warns bad posture degrades focus.",
+            "Shoulders back, chin up, {user_name}. {avatar_name} enforces optimal posture protocol."
+        ],
+        "cheerful": [
+            "Posture check time, {user_name}! 🌟 Sit tall and proud with {avatar_name}!",
+            "Let's do a quick shoulder roll dance, {user_name}! {avatar_name} is right with you! 💃",
+            "Crown to the sky, {user_name}! Feel the positive energy with {avatar_name}'s posture boost!",
+            "{avatar_name} says: stretch your neck, smile, and let's keep rocking, {user_name}!"
+        ],
+        "sarcastic": [
+            "{user_name}, you're turning into a human question mark (?). {avatar_name} is getting a ruler.",
+            "Your spine is not supposed to look like a cooked shrimp, {user_name}. {avatar_name} insists you straighten up.",
+            "I see that slump, {user_name}. {avatar_name} is judging your chair ergonomics right now.",
+            "If you fold any further into that desk, {user_name}, {avatar_name} will lose you in the multiverse."
+        ]
+    },
+    "eye_rest": {
+        "chill": [
+            "{avatar_name} here — {user_name}, look at something 20 ft away for 20 sec, save those eyes 👀",
+            "20-20-20 rule time, {user_name}. {avatar_name} says look out the window and relax for a moment.",
+            "{user_name}, give your vision a rest. Find a distant object and gaze at it with {avatar_name}.",
+            "Soft gaze out the window, {user_name}. {avatar_name} knows your eyes work hard all day."
+        ],
+        "strict": [
+            "{user_name}, execute the 20-20-20 rule now. {avatar_name} mandates looking 20 feet away for 20 seconds.",
+            "Eye fatigue reduces cognitive speed, {user_name}. {avatar_name} orders gaze off the monitor.",
+            "Rest your eyes, {user_name}. {avatar_name} requires 20 seconds off-screen focus.",
+            "{user_name}, {avatar_name} commands: look away from all screens immediately for 20 seconds."
+        ],
+        "cheerful": [
+            "Eye spa moment, {user_name}! 🌺 Look out the window and spot something green with {avatar_name}!",
+            "{avatar_name} says: give those bright eyes a sparkling 20-second holiday, {user_name}! ✨",
+            "Time to look at the horizon and daydream with {avatar_name} for 20 happy seconds, {user_name}!",
+            "Blink blink, {user_name}! Give your eyes a fresh sparkle break with {avatar_name}!"
+        ],
+        "sarcastic": [
+            "{user_name}, the pixels will survive without your gaze for 20 seconds. {avatar_name} says look away.",
+            "Are your eyeballs glued to the monitor, {user_name}? {avatar_name} suggests looking 20 feet away.",
+            "Look out the window, {user_name}. Rumor has it from {avatar_name} that the outside world still exists.",
+            "Staring contest with your monitor over, {user_name}. {avatar_name} calls a timeout."
+        ]
+    },
+    "energy_checkin": {
+        "chill": [
+            "On a scale of 1–5, how's your energy right now, {user_name}? {avatar_name} is listening.",
+            "Hey {user_name}, {avatar_name} checking in: how are you feeling energy-wise (1 to 5)?",
+            "{avatar_name} is here — what's your current energy vibe from 1 to 5, {user_name}?",
+            "How's the tank looking, {user_name}? Rate your energy from 1 (drained) to 5 (charged) for {avatar_name}."
+        ],
+        "strict": [
+            "{user_name}, report your energy level (1-5) to {avatar_name} immediately.",
+            "Energy status required, {user_name}. {avatar_name} needs rating from 1 to 5.",
+            "{user_name}, log your biometric readiness (1-5) for {avatar_name}'s analytics.",
+            "State your current stamina rating (1-5), {user_name}. {avatar_name} requires data integrity."
+        ],
+        "cheerful": [
+            "Hey friend {user_name}! 🌈 How high is your super-energy battery right now (1-5) for {avatar_name}?",
+            "{avatar_name} wants to know: how sparkling do you feel from 1 to 5 today, {user_name}?",
+            "Energy check-in time, {user_name}! ⭐ Where are you on {avatar_name}'s 1–5 fun-o-meter?",
+            "Sending you good vibes, {user_name}! {avatar_name} asks: what's your energy level (1-5)?"
+        ],
+        "sarcastic": [
+            "Be honest {user_name}, from 1 (zombie) to 5 (caffeinated rocket), how alive are you to {avatar_name}?",
+            "{avatar_name} is taking bets: is {user_name} at a 1 or an energetic 5 right now?",
+            "Rate your life force from 1 to 5, {user_name}, before {avatar_name} orders emergency espresso.",
+            "On a scale of 1 to 5, how much of your soul is still in this room, {user_name}? {avatar_name} wants to know."
+        ]
+    },
+    "meeting_prep": {
+        "chill": [
+            "{user_name}, your meeting starts in {minutes} min — want a 2-min breather first with {avatar_name}?",
+            "Meeting coming up shortly, {user_name}. {avatar_name} suggests taking a calm breath.",
+            "Heads up {user_name}: {minutes} minutes until your meeting. {avatar_name} recommends a glass of water.",
+            "{avatar_name} reminding {user_name}: meeting in {minutes} minutes. Transition smoothly!"
+        ],
+        "strict": [
+            "{user_name}, meeting starts in {minutes} minutes. {avatar_name} says clear distractions now.",
+            "Meeting prompt from {avatar_name}: {minutes} minutes remaining. Conclude current tasks, {user_name}.",
+            "{user_name}, {avatar_name} confirms transition mode engaged. Meeting in {minutes} minutes.",
+            "Do not run late, {user_name}. {avatar_name} countdown: {minutes} minutes."
+        ],
+        "cheerful": [
+            "You're going to rock your meeting in {minutes} minutes, {user_name}! {avatar_name} is cheering for you! 🚀",
+            "Meeting time approaching, {user_name}! {avatar_name} knows you'll shine! ✨",
+            "{minutes} minutes until showtime, {user_name}! Take a big confident breath with {avatar_name}!",
+            "Ready to collaborate, {user_name}? {avatar_name} says meeting begins in {minutes} mins!"
+        ],
+        "sarcastic": [
+            "Brace yourself, {user_name}: a meeting looms in {minutes} minutes. {avatar_name} will mourn your calendar.",
+            "{user_name}, {avatar_name} notes you have {minutes} minutes to mentally prepare for small talk.",
+            "{avatar_name} detected a meeting in {minutes} min. Time to practice your thoughtful nodding face, {user_name}.",
+            "Warning from {avatar_name}: human interaction imminent in {minutes} minutes, {user_name}."
+        ]
+    },
+    "fatigue_predicted": {
+        "chill": [
+            "{avatar_name} noticed {user_name}'s focus dipping — this is usually when a short break helps most.",
+            "Looks like fatigue is creeping in, {user_name}. {avatar_name} suggests a 3-minute reset.",
+            "Your pace is slowing a bit, {user_name}. No worries — {avatar_name} recommends a quick pause.",
+            "{avatar_name} senses tired hands, {user_name}. Step away for a moment to recharge."
+        ],
+        "strict": [
+            "Fatigue threshold exceeded, {user_name}. {avatar_name} metrics indicate mandatory recovery time.",
+            "{user_name}, your typing rhythm shows fatigue. {avatar_name} advises taking a break now.",
+            "Diminishing returns detected by {avatar_name}. Stop and rest for 10 minutes, {user_name}.",
+            "{user_name}: fatigue probability high. {avatar_name} orders task disengagement."
+        ],
+        "cheerful": [
+            "You've worked so hard, {user_name}! {avatar_name} says it's time for a cozy power break! 💖",
+            "Even superheroes need a recharge, {user_name}! Let's take a happy pause with {avatar_name}!",
+            "Time for a little rest magic, {user_name}! {avatar_name} knows you'll come back twice as energized! ✨",
+            "{avatar_name} is sending rest vibes to {user_name}! Take a lovely break!"
+        ],
+        "sarcastic": [
+            "{avatar_name}'s sensors detect {user_name}'s brain has turned to pudding. Go rest.",
+            "Your typing is slowing to turtle speed, {user_name}. {avatar_name} says don't fight it, take a break.",
+            "{user_name}, your keyboard is putting in more effort than you right now. {avatar_name} says rest.",
+            "Fatigue alert: {avatar_name} recommends {user_name} napping before typing in ancient hieroglyphs."
+        ]
+    },
+    "celebrate": {
+        "chill": [
+            "Nice one, {user_name}! {avatar_name} is proud 🎉",
+            "Great job taking care of yourself, {user_name}. {avatar_name} approves!",
+            "Smooth move, {user_name}. {avatar_name} says you're in the groove now!",
+            "Solid habit building, {user_name}. Keep it up with {avatar_name}!"
+        ],
+        "strict": [
+            "Action logged successfully, {user_name}. {avatar_name} confirms compliance maintained.",
+            "Good discipline, {user_name}. {avatar_name} verifies protocol followed.",
+            "{user_name}, healthy habits verified. {avatar_name} authorizes return to focus mode.",
+            "Adherence recorded. Excellent execution, {user_name} — {avatar_name} acknowledges."
+        ],
+        "cheerful": [
+            "YAY! 🎉 High five, {user_name}! {avatar_name} is doing a happy dance for you!",
+            "Woohoo! Look at you go, {user_name}! {avatar_name} says you're an absolute champion! 🌟",
+            "Superstar status unlocked! 💖 {avatar_name} is so proud of you, {user_name}!",
+            "Awesome job, {user_name}! {avatar_name} loves how you make self-care look effortless! ✨"
+        ],
+        "sarcastic": [
+            "Look at you, functioning like a responsible adult, {user_name}! {avatar_name} is mildly impressed.",
+            "You actually listened to {avatar_name}! Mark this date in history, {user_name}.",
+            "Gold star for {user_name} ⭐! You didn't ignore {avatar_name} this time.",
+            "Miracles do happen! Great job taking that break, {user_name} — {avatar_name} is stunned."
+        ]
+    }
+}

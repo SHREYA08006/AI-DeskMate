@@ -1,0 +1,49 @@
+{
+    "generated_at": "2026-09-19T16:18:29.706601",
+    "window_minutes": 10,
+    "max_label_distance_minutes": 15.0,
+    "fatigue_mapping": {
+        "5": "low_fatigue",
+        "4": "low_fatigue",
+        "3": "medium_fatigue",
+        "2": "high_fatigue",
+        "1": "high_fatigue"
+    },
+    "stats": {
+        "total_windows": 722,
+        "active_windows": 362,
+        "labeled_windows": 80,
+        "dropped_unlabeled": 642,
+        "dropped_invalid": 0,
+        "train_samples": 64,
+        "test_samples": 16,
+        "train_class_distribution": {
+            "low_fatigue": 28,
+            "medium_fatigue": 24,
+            "high_fatigue": 12
+        },
+        "test_class_distribution": {
+            "high_fatigue": 8,
+            "low_fatigue": 4,
+            "medium_fatigue": 4
+        },
+        "date_range_start": "2026-09-14T16:00:00",
+        "date_range_end": "2026-09-19T16:20:00"
+    },
+    "features": [
+        "hour_of_day",
+        "day_of_week",
+        "avg_keys_per_min",
+        "avg_mouse_events_per_min",
+        "avg_idle_seconds",
+        "time_since_last_break_min",
+        "continuous_active_min",
+        "app_switch_frequency",
+        "is_in_flow_ratio"
+    ],
+    "targets": [
+        "fatigue_label",
+        "fatigue_class",
+        "nearest_energy_level"
+    ]
+}
