@@ -189,6 +189,161 @@ st.markdown(f"""
 </div>
 """, unsafe_allow_html=True)
 
+# ----------------------------------------------------
+# 🐾 COMPANION LAUNCH & SETUP WIDGET
+# ----------------------------------------------------
+try:
+    from app.instance_manager import InstanceManager
+    from app.settings.config_manager import ConfigManager, AVATAR_OPTIONS, PERSONALITY_TONES
+except (ImportError, ValueError):
+    from ..instance_manager import InstanceManager
+    from ..settings.config_manager import ConfigManager, AVATAR_OPTIONS, PERSONALITY_TONES
+
+inst_mgr = InstanceManager()
+companion_running = inst_mgr.is_instance_running()
+
+with st.expander("🐾 **Companion Setup & Desktop Launch**", expanded=not companion_running):
+    if companion_running:
+        st.success(f"🟢 **Desktop Companion is currently ACTIVE on your desktop** ({avatar_emoji} **{avatar_name}**). You can adjust settings or update your companion below.")
+    else:
+        st.info("💡 **Ready to work?** Choose your companion avatar and click **'🚀 Start Avatar Companion & Close Dashboard'** below. The companion will appear on your desktop and this dashboard will close.")
+
+    col_av, col_details = st.columns([1, 1], gap="medium")
+
+    with col_av:
+        st.markdown("##### 1. Choose Companion Avatar")
+        avatar_types = [opt['type'] for opt in AVATAR_OPTIONS]
+        avatar_labels = {opt['type']: f"{opt['emoji']} {opt['name']} — {opt['description']}" for opt in AVATAR_OPTIONS}
+        current_av = config.get('avatar_type', 'cat')
+        selected_av = st.radio(
+            "Select Avatar",
+            options=avatar_types,
+            index=avatar_types.index(current_av) if current_av in avatar_types else 0,
+            format_func=lambda x: avatar_labels.get(x, x),
+            label_visibility="collapsed"
+        )
+
+    with col_details:
+        st.markdown("##### 2. Companion Persona & Settings")
+        c1, c2 = st.columns(2)
+        with c1:
+            companion_name_input = st.text_input("Avatar Name", value=config.get('avatar_name', 'Mochi'))
+        with c2:
+            user_name_input = st.text_input("Your Name", value=config.get('user_name', 'Friend'))
+
+        c3, c4 = st.columns(2)
+        with c3:
+            tones_map = {'chill': 'Chill & Gentle', 'strict': 'Strict & Disciplined', 'cheerful': 'Cheerful & Upbeat', 'sarcastic': 'Witty & Sarcastic'}
+            current_tone_key = config.get('personality_tone', 'chill')
+            tone_idx = list(tones_map.keys()).index(current_tone_key) if current_tone_key in tones_map else 0
+            selected_tone = st.selectbox(
+                "Personality Tone",
+                options=list(tones_map.keys()),
+                index=tone_idx,
+                format_func=lambda x: tones_map[x]
+            )
+        with c4:
+            break_min_val = st.number_input("Screen Break Interval (min)", min_value=5, max_value=120, value=int(config.get('break_interval_minutes', 15)), step=5)
+
+        c5, c6 = st.columns(2)
+        with c5:
+            screen_walk_val = st.checkbox("🚶 Walk Across Screen for Breaks", value=config.get('screen_walk_enabled', True), help="Companion walks to screen center for break reminders and exits to the opposite side")
+        with c6:
+            tts_val = st.checkbox("🔊 Voice Nudges (Offline TTS)", value=config.get('tts_enabled', True))
+
+    st.markdown("---")
+    
+    if not companion_running:
+        launch_btn = st.button("🚀 Start Avatar Companion & Close Dashboard", type="primary", use_container_width=True)
+        if launch_btn:
+            # 1. Save chosen config
+            cfg_mgr = ConfigManager()
+            cfg_mgr.update({
+                'avatar_type': selected_av,
+                'avatar_name': companion_name_input.strip() or 'Mochi',
+                'user_name': user_name_input.strip() or 'Friend',
+                'personality_tone': selected_tone,
+                'break_interval_minutes': int(break_min_val),
+                'screen_walk_enabled': screen_walk_val,
+                'tts_enabled': tts_val,
+                'onboarding_completed': True
+            })
+
+            # 2. Spawn companion process detached
+            cmd = [sys.executable, "-m", "app.main", "--companion"]
+            if is_demo_mode:
+                cmd.append("--demo")
+
+            creationflags = 0
+            if sys.platform == 'win32':
+                import subprocess
+                creationflags = subprocess.CREATE_NEW_PROCESS_GROUP | subprocess.DETACHED_PROCESS
+
+            import subprocess
+            subprocess.Popen(
+                cmd,
+                creationflags=creationflags,
+                close_fds=True if sys.platform != 'win32' else False
+            )
+
+            st.balloons()
+            st.success(f"🎉 **{companion_name_input} is now starting on your desktop!** Look at the corner of your screen.")
+            st.info("The companion avatar will appear on your desktop and system tray. Closing this dashboard now...")
+
+            # 3. Inject JS to close browser tab and shutdown Streamlit
+            st.markdown("""
+            <script>
+                setTimeout(function() {
+                    window.open('', '_self', '');
+                    window.close();
+                }, 1200);
+            </script>
+            """, unsafe_allow_html=True)
+
+            import threading, time
+            def _exit_srv():
+                time.sleep(2.0)
+                os._exit(0)
+            threading.Thread(target=_exit_srv, daemon=True).start()
+    else:
+        col_btn1, col_btn2 = st.columns(2)
+        with col_btn1:
+            if st.button("💾 Apply Settings to Running Companion", use_container_width=True):
+                cfg_mgr = ConfigManager()
+                cfg_mgr.update({
+                    'avatar_type': selected_av,
+                    'avatar_name': companion_name_input.strip() or 'Mochi',
+                    'user_name': user_name_input.strip() or 'Friend',
+                    'personality_tone': selected_tone,
+                    'break_interval_minutes': int(break_min_val),
+                    'screen_walk_enabled': screen_walk_val,
+                    'tts_enabled': tts_val
+                })
+                st.success("✅ Settings updated! Your running companion will use the new settings.")
+                st.rerun()
+        with col_btn2:
+            if st.button("🔄 Restart Companion with New Avatar", use_container_width=True):
+                cfg_mgr = ConfigManager()
+                cfg_mgr.update({
+                    'avatar_type': selected_av,
+                    'avatar_name': companion_name_input.strip() or 'Mochi',
+                    'user_name': user_name_input.strip() or 'Friend',
+                    'personality_tone': selected_tone,
+                    'break_interval_minutes': int(break_min_val),
+                    'screen_walk_enabled': screen_walk_val,
+                    'tts_enabled': tts_val,
+                    'onboarding_completed': True
+                })
+                cmd = [sys.executable, "-m", "app.main", "--companion"]
+                if is_demo_mode:
+                    cmd.append("--demo")
+                import subprocess
+                creationflags = subprocess.CREATE_NEW_PROCESS_GROUP | subprocess.DETACHED_PROCESS if sys.platform == 'win32' else 0
+                subprocess.Popen(cmd, creationflags=creationflags)
+                st.success("Restarting companion...")
+                time.sleep(1.0)
+                st.rerun()
+
 # Empty state check
 if df_activity.empty and df_energy.empty and df_nudges.empty:
     st.markdown(f"""

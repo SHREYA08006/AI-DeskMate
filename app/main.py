@@ -320,6 +320,17 @@ def main():
         return
 
     is_demo = "--demo" in sys.argv
+    is_companion = "--companion" in sys.argv or "--avatar-only" in sys.argv
+
+    # If neither --dashboard nor --companion is passed, open Dashboard first!
+    if not is_companion:
+        if __package__ is None or __package__ == '':
+            from app.dashboard.launcher import launch_dashboard
+        else:
+            from .dashboard.launcher import launch_dashboard
+        launch_dashboard(demo=is_demo, open_browser=True)
+        return
+
     app = DeskMateApp(is_demo=is_demo)
     app.start()
 

@@ -69,6 +69,19 @@ class InstanceManager:
         self.update_heartbeat(clean_exit=False)
         return True, unclean_shutdown
 
+    def is_instance_running(self) -> bool:
+        """Return True if a companion instance is actively running with valid PID."""
+        if os.path.exists(self.lock_file):
+            try:
+                with open(self.lock_file, "r", encoding="utf-8") as f:
+                    data = json.load(f)
+                old_pid = data.get("pid")
+                if old_pid and self._is_pid_running(old_pid):
+                    return True
+            except Exception:
+                pass
+        return False
+
     def _is_pid_running(self, pid: int) -> bool:
         if sys.platform == "win32":
             try:
