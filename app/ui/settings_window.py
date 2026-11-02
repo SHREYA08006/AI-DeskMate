@@ -34,6 +34,7 @@ class SettingsWindow(ctk.CTkToplevel):
         self.mute_var = ctk.BoolVar(value=self.config_mgr.get('mute_hours_enabled', False))
         self.mute_start_var = ctk.StringVar(value=self.config_mgr.get('mute_hours_start', '22:00'))
         self.mute_end_var = ctk.StringVar(value=self.config_mgr.get('mute_hours_end', '08:00'))
+        self.screen_walk_var = ctk.BoolVar(value=self.config_mgr.get('screen_walk_enabled', True))
 
         self.water_int_var = ctk.StringVar(value=str(self.config_mgr.get('water_interval_minutes', 60)))
         self.break_int_var = ctk.StringVar(value=str(self.config_mgr.get('break_interval_minutes', 90)))
@@ -132,6 +133,16 @@ class SettingsWindow(ctk.CTkToplevel):
                 variable=self.tone_var
             )
             rb.pack(side='left', padx=(0, 12), pady=4)
+
+        walk_sw = ctk.CTkSwitch(
+            prof_card,
+            text='🚶 Walk Across Screen (Walks to center for breaks, speaks, then walks to opposite side)',
+            variable=self.screen_walk_var,
+            onvalue=True,
+            offvalue=False,
+            font=ctk.CTkFont(size=13, weight='bold')
+        )
+        walk_sw.pack(anchor='w', padx=18, pady=(4, 16))
 
         # 2. Flow State Detection Card (NEW Phase 3)
         flow_card = ctk.CTkFrame(scroll_frame, corner_radius=12, fg_color='#1E293B', border_width=1, border_color='#334155')

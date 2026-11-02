@@ -188,6 +188,7 @@ class TrayController:
 
         menu_items.extend([
             Menu.SEPARATOR,
+            item('🚶 Walk Across Screen (Break Test)', lambda: self.on_test_walk() if self.on_test_walk else (self.on_test_nudge('break_reminder') if self.on_test_nudge else None)),
             item('💧 Water Reminder Test', lambda: self.on_test_nudge('water_reminder') if self.on_test_nudge else None),
             item('🧘 Posture Check Test', lambda: self.on_test_nudge('posture_check') if self.on_test_nudge else None),
             item('👀 Eye Rest (20-20-20) Test', lambda: self.on_test_nudge('eye_rest') if self.on_test_nudge else None),

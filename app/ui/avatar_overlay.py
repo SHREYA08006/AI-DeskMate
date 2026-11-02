@@ -1,6 +1,7 @@
 import os
 import sys
 import threading
+import math
 import tkinter as tk
 from typing import Optional, Callable
 import customtkinter as ctk
@@ -64,6 +65,14 @@ class AvatarOverlay(ctk.CTk):
         self.expanded_w = 410
         self.expanded_h = 230
 
+        self.current_side = 'right'
+        self.current_x = None
+        self.current_y = None
+        self.is_walking = False
+        self._walk_timer = None
+        self._auto_dismiss_timer = None
+        self._walk_step_count = 0
+
         self._set_collapsed_geometry()
 
     def _get_safe_screen_bounds(self) -> tuple:
@@ -75,17 +84,38 @@ class AvatarOverlay(ctk.CTk):
         except Exception:
             return 1920, 1080
 
-    def _set_collapsed_geometry(self):
-        screen_w, screen_h = self._get_safe_screen_bounds()
-        pos_x = max(10, screen_w - self.collapsed_w - 20)
-        pos_y = max(10, screen_h - self.collapsed_h - 50)
-        self.geometry(f'{self.collapsed_w}x{self.collapsed_h}+{pos_x}+{pos_y}')
+    def _get_dock_x(self, side: Optional[str] = None) -> int:
+        side = side or self.current_side
+        screen_w, _ = self._get_safe_screen_bounds()
+        if side == 'left':
+            return 20
+        return max(10, screen_w - self.collapsed_w - 20)
 
-    def _set_expanded_geometry(self):
+    def _get_base_y(self) -> int:
+        _, screen_h = self._get_safe_screen_bounds()
+        return max(10, screen_h - self.collapsed_h - 50)
+
+    def _set_collapsed_geometry(self, x: Optional[int] = None, y: Optional[int] = None):
+        if x is None:
+            x = self.current_x if self.current_x is not None else self._get_dock_x(self.current_side)
+        if y is None:
+            y = self._get_base_y()
+        self.current_x = x
+        self.current_y = y
+        self.geometry(f'{self.collapsed_w}x{self.collapsed_h}+{int(x)}+{int(y)}')
+
+    def _set_expanded_geometry(self, x: Optional[int] = None, y: Optional[int] = None):
         screen_w, screen_h = self._get_safe_screen_bounds()
-        pos_x = max(10, screen_w - self.expanded_w - 20)
-        pos_y = max(10, screen_h - self.expanded_h - 50)
-        self.geometry(f'{self.expanded_w}x{self.expanded_h}+{pos_x}+{pos_y}')
+        if x is None:
+            if self.current_side == 'left':
+                x = 20
+            elif self.current_side == 'center':
+                x = max(10, (screen_w - self.expanded_w) // 2)
+            else:
+                x = max(10, screen_w - self.expanded_w - 20)
+        if y is None:
+            y = max(10, screen_h - self.expanded_h - 50)
+        self.geometry(f'{self.expanded_w}x{self.expanded_h}+{int(x)}+{int(y)}')
 
     def _get_theme_accent(self) -> str:
         conf = AVATAR_CONFIGS.get(self.avatar_type.lower(), {})
@@ -207,10 +237,199 @@ class AvatarOverlay(ctk.CTk):
         else:
             self.collapse_to_idle()
 
+    def walk_to(self, target_x: int, on_complete: Optional[Callable[[], None]] = None, speed_px: int = 11, interval_ms: int = 20):
+        """Smoothly moves the collapsed avatar window horizontally to target_x with animated walking bob."""
+        if self._walk_timer:
+            try:
+                self.after_cancel(self._walk_timer)
+            except Exception:
+                pass
+            self._walk_timer = None
+
+        self.is_walking = True
+        base_y = self._get_base_y()
+        if self.current_x is None:
+            self.current_x = self._get_dock_x(self.current_side)
+
+        def _step():
+            if not self.is_walking:
+                return
+
+            try:
+                if not self.winfo_exists():
+                    return
+            except Exception:
+                return
+
+            dx = target_x - self.current_x
+            if abs(dx) <= speed_px:
+                self.current_x = target_x
+                self.current_y = base_y
+                self.geometry(f'{self.collapsed_w}x{self.collapsed_h}+{int(self.current_x)}+{int(self.current_y)}')
+                self.is_walking = False
+                self._walk_timer = None
+                if on_complete:
+                    on_complete()
+                return
+
+            direction = 1 if dx > 0 else -1
+            self.current_x += direction * speed_px
+            self._walk_step_count += 1
+            bob = int(math.sin(self._walk_step_count * 0.45) * 5)
+            self.current_y = base_y + bob
+
+            self.geometry(f'{self.collapsed_w}x{self.collapsed_h}+{int(self.current_x)}+{int(self.current_y)}')
+            self._walk_timer = self.after(interval_ms, _step)
+
+        _step()
+
+    def start_screen_walk_nudge(self, nudge_type: str = 'break_reminder', **kwargs):
+        """Walks companion from dock to screen center, speaks aloud, pauses, and walks to opposite side."""
+        if threading.current_thread() is not threading.main_thread():
+            self.after(0, lambda: self.start_screen_walk_nudge(nudge_type, **kwargs))
+            return
+
+        if self.is_walking:
+            logger.info("Screen walk already in progress, skipping duplicate.")
+            return
+
+        screen_w, screen_h = self._get_safe_screen_bounds()
+        center_collapsed_x = max(10, (screen_w - self.collapsed_w) // 2)
+
+        active_tone = kwargs.pop('tone', self.tone)
+        mins = kwargs.get('minutes', 15)
+
+        if nudge_type == 'break_reminder':
+            msg = f"Time for a break! It's been a while you've been on the screen ({mins} min active). Let's take a quick stretch!"
+        else:
+            msg = self.template_engine.render(
+                nudge_type,
+                tone=active_tone,
+                user_name=self.user_name,
+                avatar_name=self.avatar_name,
+                **kwargs
+            )
+        self.current_nudge_type = nudge_type
+        self.current_message = msg
+
+        if self.is_expanded:
+            self._apply_layout_collapsed()
+
+        self.anim_ctrl.set_state('alert')
+
+        next_side = 'left' if self.current_side == 'right' else 'right'
+        next_dock_x = self._get_dock_x(next_side)
+
+        logger.info(f"Walking companion from {self.current_side} (x={self.current_x}) to center (x={center_collapsed_x})...")
+
+        def _on_reached_center():
+            logger.info("Reached center! Expanding dialogue and speaking...")
+            self.current_side = 'center'
+            self._apply_layout_expanded()
+            center_expanded_x = max(10, (screen_w - self.expanded_w) // 2)
+            center_expanded_y = max(10, screen_h - self.expanded_h - 55)
+            self.geometry(f'{self.expanded_w}x{self.expanded_h}+{center_expanded_x}+{center_expanded_y}')
+
+            self.msg_label.configure(text=msg)
+
+            for ch in self.action_frame.winfo_children():
+                ch.destroy()
+
+            def _finish_and_walk():
+                if self._auto_dismiss_timer:
+                    try:
+                        self.after_cancel(self._auto_dismiss_timer)
+                    except Exception:
+                        pass
+                    self._auto_dismiss_timer = None
+
+                self._apply_layout_collapsed()
+                self.current_x = center_collapsed_x
+                self._set_collapsed_geometry(x=self.current_x)
+                self.anim_ctrl.set_state('alert')
+                logger.info(f"Walking companion to {next_side} dock (x={next_dock_x})...")
+                self.walk_to(
+                    next_dock_x,
+                    on_complete=lambda: self._on_reach_destination(next_side),
+                    speed_px=11,
+                    interval_ms=20
+                )
+
+            # Center Action Buttons
+            ctk.CTkButton(
+                self.action_frame,
+                text='🧘 Take Break',
+                fg_color='#2E7D32',
+                hover_color='#388E3C',
+                width=110,
+                height=32,
+                font=ctk.CTkFont(size=12, weight='bold'),
+                command=lambda: (
+                    self.anim_ctrl.set_state('celebrate', play_once=True),
+                    self.after(1400, _finish_and_walk)
+                )
+            ).pack(side='left', padx=3, expand=True)
+
+            ctk.CTkButton(
+                self.action_frame,
+                text='⏰ Snooze 10m',
+                fg_color='#455A64',
+                hover_color='#607D8B',
+                width=100,
+                height=32,
+                font=ctk.CTkFont(size=12),
+                command=lambda: (
+                    self._on_snooze_silent(),
+                    _finish_and_walk()
+                )
+            ).pack(side='left', padx=3, expand=True)
+
+            ctk.CTkButton(
+                self.action_frame,
+                text='✕ Continue',
+                fg_color='#37474F',
+                hover_color='#424242',
+                width=85,
+                height=32,
+                font=ctk.CTkFont(size=12),
+                command=_finish_and_walk
+            ).pack(side='left', padx=3, expand=True)
+
+            # Speak aloud via offline TTS
+            self.tts_engine.speak(msg, force=True)
+
+            # Auto-continue walking after 8 seconds if ignored
+            self._auto_dismiss_timer = self.after(8000, _finish_and_walk)
+
+        self.walk_to(
+            center_collapsed_x,
+            on_complete=_on_reached_center,
+            speed_px=11,
+            interval_ms=20
+        )
+
+    def _on_snooze_silent(self):
+        try:
+            self.db_mgr.log_nudge(nudge_type=self.current_nudge_type, message=self.current_message, action='snoozed')
+        except Exception as e:
+            logger.error(f"Error logging snooze: {e}")
+
+    def _on_reach_destination(self, final_side: str):
+        self.current_side = final_side
+        self.current_x = self._get_dock_x(final_side)
+        self.is_walking = False
+        self._set_collapsed_geometry(x=self.current_x)
+        self.anim_ctrl.set_state('idle')
+        logger.info(f"Companion successfully docked at {final_side} corner as idle icon.")
+
     def show_nudge(self, nudge_type: str, **kwargs):
         """Displays a companion nudge without stealing keyboard focus."""
         if threading.current_thread() is not threading.main_thread():
             self.after(0, lambda: self.show_nudge(nudge_type, **kwargs))
+            return
+
+        if self.config_mgr.get('screen_walk_enabled', True):
+            self.start_screen_walk_nudge(nudge_type, **kwargs)
             return
 
         try:
