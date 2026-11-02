@@ -18,10 +18,14 @@ $VersionFile = Join-Path $ProjectDir "VERSION"
 $AppVersion = if (Test-Path $VersionFile) { (Get-Content $VersionFile).Trim() } else { "1.0.0" }
 Write-Host "[1/4] App Version: $AppVersion" -ForegroundColor Green
 
+# Detect Python and PyInstaller executables
+$PythonExe = if (Test-Path ".\.venv\Scripts\python.exe") { ".\.venv\Scripts\python.exe" } elseif (Get-Command python -ErrorAction SilentlyContinue) { "python" } else { "py" }
+$PyinstallerExe = if (Test-Path ".\.venv\Scripts\pyinstaller.exe") { ".\.venv\Scripts\pyinstaller.exe" } elseif (Get-Command pyinstaller -ErrorAction SilentlyContinue) { "pyinstaller" } else { "$PythonExe -m PyInstaller" }
+
 # 2. Run Test Suite
 if (-not $SkipTests) {
-    Write-Host "[2/4] Running automated test suite before building..." -ForegroundColor Yellow
-    & .\.venv\Scripts\python -m unittest tests.test_phase9
+    Write-Host "[2/4] Running automated test suite before building using $PythonExe..." -ForegroundColor Yellow
+    & $PythonExe -m unittest tests.test_phase9
     if ($LASTEXITCODE -ne 0) {
         Write-Error "Phase 9 tests failed. Aborting build."
         exit 1
@@ -32,8 +36,8 @@ if (-not $SkipTests) {
 }
 
 # 3. Build Standalone PyInstaller Package
-Write-Host "[3/4] Building standalone executable via PyInstaller..." -ForegroundColor Yellow
-& .\.venv\Scripts\pyinstaller build/deskmate.spec --noconfirm --distpath dist --workpath build/temp
+Write-Host "[3/4] Building standalone executable via PyInstaller using $PyinstallerExe..." -ForegroundColor Yellow
+& $PyinstallerExe build/deskmate.spec --noconfirm --distpath dist --workpath build/temp
 
 if ($LASTEXITCODE -ne 0) {
     Write-Error "PyInstaller build failed."

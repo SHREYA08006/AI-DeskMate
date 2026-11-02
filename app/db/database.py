@@ -19,14 +19,18 @@ class DatabaseManager:
 
     def __init__(self, db_path: Optional[str] = None):
         self.db_path = db_path or get_db_path()
-        os.makedirs(os.path.dirname(self.db_path), exist_ok=True)
+        try:
+            os.makedirs(os.path.dirname(self.db_path), exist_ok=True)
+        except OSError as e:
+            logger.warning(f"Could not create database directory for {self.db_path}: {e}")
         self.init_db()
 
     @classmethod
     def get_instance(cls, db_path: Optional[str] = None) -> 'DatabaseManager':
+        target_path = db_path or get_db_path()
         with cls._lock:
-            if cls._instance is None:
-                cls._instance = DatabaseManager(db_path)
+            if cls._instance is None or cls._instance.db_path != target_path:
+                cls._instance = DatabaseManager(target_path)
             return cls._instance
 
     @contextlib.contextmanager

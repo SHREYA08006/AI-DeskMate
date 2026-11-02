@@ -25,6 +25,13 @@ class TemplateEngine:
             print(f'Warning: Templates file {self.templates_path} not found.')
 
     def render(self, nudge_type: str, tone: Optional[str] = None, **kwargs) -> str:
+        # Alias common variants for backward compatibility
+        aliases = {
+            'posture_reminder': 'posture_check',
+            'drink_water': 'water_reminder',
+            'break': 'break_reminder',
+        }
+        nudge_type = aliases.get(nudge_type, nudge_type)
         current_tone = tone or self.config_mgr.get('personality_tone', 'chill')
         user_name = kwargs.get('user_name', self.config_mgr.get('user_name', 'Friend'))
         avatar_name = kwargs.get('avatar_name', self.config_mgr.get('avatar_name', 'DeskMate'))

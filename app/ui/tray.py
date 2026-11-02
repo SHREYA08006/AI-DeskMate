@@ -86,6 +86,8 @@ class TrayController:
                 if self.is_demo:
                     cmd.append("--demo")
 
+                cmd.append("--no-browser")
+
                 self._streamlit_proc = subprocess.Popen(
                     cmd,
                     stdout=subprocess.DEVNULL,
@@ -215,5 +217,11 @@ class TrayController:
             self.on_quit()
 
     def stop(self):
+        if self._streamlit_proc:
+            try:
+                self._streamlit_proc.terminate()
+            except Exception:
+                pass
+            self._streamlit_proc = None
         if self.icon:
             self.icon.stop()

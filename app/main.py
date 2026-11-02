@@ -213,23 +213,31 @@ class DeskMateApp:
     def show_nudge(self, nudge_type: str, **kwargs):
         if self.overlay:
             try:
+                if threading.current_thread() is not threading.main_thread():
+                    self.overlay.after(0, lambda: self.show_nudge(nudge_type, **kwargs))
+                    return
                 self.overlay.show_nudge(nudge_type, **kwargs)
             except Exception as e:
                 logger.error(f"Error presenting nudge '{nudge_type}': {e}", exc_info=True)
 
     def open_settings(self):
-        def _launch():
-            try:
-                settings_win = SettingsWindow(
-                    config_mgr=self.config_mgr,
-                    on_settings_changed=self._on_settings_updated
-                )
-                settings_win.mainloop()
-            except Exception as e:
-                logger.error(f'Error opening settings: {e}', exc_info=True)
+        if self.overlay:
+            self.overlay.after(0, self._open_settings_on_main_thread)
 
-        t = threading.Thread(target=_launch, daemon=True)
-        t.start()
+    def _open_settings_on_main_thread(self):
+        try:
+            if self.settings_win is not None and self.settings_win.winfo_exists():
+                self.settings_win.deiconify()
+                self.settings_win.lift()
+                self.settings_win.focus_force()
+                return
+
+            self.settings_win = SettingsWindow(
+                config_mgr=self.config_mgr,
+                on_settings_changed=self._on_settings_updated
+            )
+        except Exception as e:
+            logger.error(f'Error opening settings: {e}', exc_info=True)
 
     def _on_settings_updated(self):
         logger.info('Settings saved. Updating live desktop companion...')

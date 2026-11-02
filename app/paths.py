@@ -71,8 +71,11 @@ def ensure_user_data_dir() -> Path:
     Initializes default config and directories if missing.
     """
     data_dir = get_user_data_dir()
-    data_dir.mkdir(parents=True, exist_ok=True)
-    (data_dir / "logs").mkdir(parents=True, exist_ok=True)
+    try:
+        data_dir.mkdir(parents=True, exist_ok=True)
+        (data_dir / "logs").mkdir(parents=True, exist_ok=True)
+    except OSError as e:
+        logger.warning(f"Could not create user data directory {data_dir}: {e}")
     return data_dir
 
 
@@ -168,7 +171,10 @@ def get_assets_dir() -> str:
     if bundled_assets.exists():
         return str(bundled_assets)
     user_assets = get_user_data_dir() / "assets"
-    user_assets.mkdir(parents=True, exist_ok=True)
+    try:
+        user_assets.mkdir(parents=True, exist_ok=True)
+    except OSError as e:
+        logger.warning(f"Could not create user assets directory {user_assets}: {e}")
     return str(user_assets)
 
 

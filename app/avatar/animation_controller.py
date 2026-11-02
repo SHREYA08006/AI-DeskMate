@@ -1,14 +1,22 @@
+from __future__ import annotations
 import os
 import time
-from typing import Optional, Callable, Dict, List
-import customtkinter as ctk
+from typing import Optional, Callable, Dict, List, Any
+
+try:
+    import customtkinter as ctk
+    CTK_AVAILABLE = True
+except ImportError:
+    ctk = None
+    CTK_AVAILABLE = False
+
 from PIL import Image
 
 from .avatar_manager import AvatarManager, FRAME_COUNT
 
 class AnimationController:
     def __init__(self,
-                 target_label: ctk.CTkLabel,
+                 target_label: Any,
                  avatar_type: str = 'cat',
                  initial_state: str = 'idle',
                  avatar_mgr: Optional[AvatarManager] = None,
@@ -25,7 +33,7 @@ class AnimationController:
         self.current_frame_index = 0
         self.is_running = False
         self._after_id = None
-        self._cached_images: Dict[str, List[ctk.CTkImage]] = {}
+        self._cached_images: Dict[str, List[Any]] = {}
 
         self.on_animation_complete: Optional[Callable[[str], None]] = None
         self._play_once = False
@@ -39,7 +47,10 @@ class AnimationController:
             for fp in frame_paths:
                 try:
                     pil_img = Image.open(fp)
-                    ctk_img = ctk.CTkImage(light_image=pil_img, dark_image=pil_img, size=self.frame_size)
+                    if ctk is not None and hasattr(ctk, 'CTkImage'):
+                        ctk_img = ctk.CTkImage(light_image=pil_img, dark_image=pil_img, size=self.frame_size)
+                    else:
+                        ctk_img = pil_img
                     ctk_imgs.append(ctk_img)
                 except Exception as e:
                     print(f'Error loading frame {fp}: {e}')

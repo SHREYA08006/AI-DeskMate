@@ -25,7 +25,7 @@ logger = logging.getLogger("deskmate.demo")
 
 SAMPLE_NUDGE_TYPES = [
     "water_reminder",
-    "posture_reminder",
+    "posture_check",
     "eye_rest",
     "break_reminder",
     "fatigue_predicted"
@@ -177,7 +177,7 @@ class DemoManager:
             # Nudge generation: realistic intervals during work hours
             if is_workday and is_active and minute in (15, 45) and hour in (10, 11, 14, 15, 16):
                 nudge_type = random.choice([
-                    "water_reminder", "posture_reminder", "eye_rest", "break_reminder", "fatigue_predicted"
+                    "water_reminder", "posture_check", "eye_rest", "break_reminder", "fatigue_predicted"
                 ])
                 outcome = random.choices(["acted", "dismissed", "snoozed"], weights=[0.65, 0.20, 0.15])[0]
 

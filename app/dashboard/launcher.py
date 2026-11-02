@@ -52,15 +52,6 @@ def get_dashboard_script_path() -> str:
     else:
         # Development mode – script is alongside this file.
         return str(Path(__file__).resolve().parent / "dashboard.py")
-    """Return the absolute path to app/dashboard/dashboard.py."""
-    if is_frozen():
-        base = get_bundle_dir()
-        candidate = base / "app" / "dashboard" / "dashboard.py"
-        if candidate.exists():
-            return str(candidate)
-        return str(base / "dashboard.py")
-    else:
-        return str(Path(__file__).resolve().parent / "dashboard.py")
 
 
 def launch_dashboard(port: int = None, demo: bool = False, open_browser: bool = True):

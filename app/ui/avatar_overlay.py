@@ -1,5 +1,6 @@
 import os
 import sys
+import threading
 import tkinter as tk
 from typing import Optional, Callable
 import customtkinter as ctk
@@ -208,6 +209,10 @@ class AvatarOverlay(ctk.CTk):
 
     def show_nudge(self, nudge_type: str, **kwargs):
         """Displays a companion nudge without stealing keyboard focus."""
+        if threading.current_thread() is not threading.main_thread():
+            self.after(0, lambda: self.show_nudge(nudge_type, **kwargs))
+            return
+
         try:
             self.current_nudge_type = nudge_type
             active_tone = kwargs.pop('tone', self.tone)

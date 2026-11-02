@@ -267,7 +267,7 @@ class SettingsWindow(ctk.CTkToplevel):
         ctk.CTkLabel(thresh_row, text='Model Confidence Threshold (0.0 - 1.0):', font=ctk.CTkFont(size=12), text_color='#94A3B8').pack(side='left', padx=(0, 10))
         ctk.CTkEntry(thresh_row, textvariable=self.ml_threshold_var, width=70, height=32).pack(side='left')
 
-        # 6. System & Autostart Card
+        # 7. System & Autostart Card
         sys_card = ctk.CTkFrame(scroll_frame, corner_radius=12, fg_color='#1E293B', border_width=1, border_color='#334155')
         sys_card.pack(fill='x', pady=8)
 
@@ -331,6 +331,18 @@ class SettingsWindow(ctk.CTkToplevel):
         self.tts_engine.speak(sample_msg)
 
     def _save_settings(self):
+        def _safe_int(val, default):
+            try:
+                return int(str(val).strip())
+            except (ValueError, TypeError):
+                return default
+
+        def _safe_float(val, default):
+            try:
+                return float(str(val).strip())
+            except (ValueError, TypeError):
+                return default
+
         try:
             updates = {
                 'avatar_type': self.avatar_type_var.get(),
@@ -341,17 +353,17 @@ class SettingsWindow(ctk.CTkToplevel):
                 'mute_hours_enabled': self.mute_var.get(),
                 'mute_hours_start': self.mute_start_var.get().strip() or '22:00',
                 'mute_hours_end': self.mute_end_var.get().strip() or '08:00',
-                'water_interval_minutes': int(self.water_int_var.get()),
-                'break_interval_minutes': int(self.break_int_var.get()),
-                'posture_interval_minutes': int(self.posture_int_var.get()),
-                'eye_rest_interval_minutes': int(self.eye_int_var.get()),
-                'energy_checkin_interval_minutes': int(self.energy_int_var.get()),
+                'water_interval_minutes': _safe_int(self.water_int_var.get(), 60),
+                'break_interval_minutes': _safe_int(self.break_int_var.get(), 90),
+                'posture_interval_minutes': _safe_int(self.posture_int_var.get(), 45),
+                'eye_rest_interval_minutes': _safe_int(self.eye_int_var.get(), 20),
+                'energy_checkin_interval_minutes': _safe_int(self.energy_int_var.get(), 120),
                 'flow_detection_enabled': self.flow_enabled_var.get(),
-                'flow_keys_threshold': int(self.flow_threshold_var.get()),
-                'flow_window_minutes': int(self.flow_window_var.get()),
+                'flow_keys_threshold': _safe_int(self.flow_threshold_var.get(), 120),
+                'flow_window_minutes': _safe_int(self.flow_window_var.get(), 5),
                 'enable_ml_fatigue_nudges': self.ml_fatigue_var.get(),
                 'enable_adaptive_frequency': self.adaptive_freq_var.get(),
-                'ml_confidence_threshold': float(self.ml_threshold_var.get()),
+                'ml_confidence_threshold': _safe_float(self.ml_threshold_var.get(), 0.6),
                 'launch_on_startup': self.autostart_var.get()
             }
 
@@ -370,4 +382,3 @@ class SettingsWindow(ctk.CTkToplevel):
             self.destroy()
         except Exception as e:
             print(f'Error saving settings: {e}')
-

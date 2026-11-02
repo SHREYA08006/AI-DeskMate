@@ -1,12 +1,22 @@
 ﻿import os
+import sys
 import random
 import sqlite3
 from datetime import datetime, timedelta
 
 def seed_demo_data():
     base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-    db_path = os.path.join(base_dir, 'data', 'deskmate.db')
+    if base_dir not in sys.path:
+        sys.path.insert(0, base_dir)
+    data_dir = os.path.join(base_dir, 'data')
+    os.makedirs(data_dir, exist_ok=True)
+    db_path = os.path.join(data_dir, 'deskmate.db')
     
+    # Initialize schema first to ensure tables exist
+    from app.db.database import DatabaseManager
+    db = DatabaseManager(db_path)
+    db.init_db()
+
     conn = sqlite3.connect(db_path)
     cursor = conn.cursor()
 

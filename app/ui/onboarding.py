@@ -45,7 +45,7 @@ class OnboardingWindow(ctk.CTk):
         header_frame = ctk.CTkFrame(scroll, fg_color='transparent')
         header_frame.pack(fill='x', pady=(0, 15))
         
-        title_lbl = ctk.CTkLabel(header_frame, text='Choose Your DeskMate \n\ud083\udc18', font=ctk.CTkFont(size=24, weight='bold'))
+        title_lbl = ctk.CTkLabel(header_frame, text='Choose Your DeskMate 🐾', font=ctk.CTkFont(size=24, weight='bold'))
         title_lbl.pack(anchor='w')
         
         sub_lbl = ctk.CTkLabel(header_frame, text='Your personal desktop companion for breaks, posture, water, and focus flow.', font=ctk.CTkFont(size=13), text_color='gray70')
@@ -92,7 +92,7 @@ class OnboardingWindow(ctk.CTk):
         a_entry = ctk.CTkEntry(avatar_row, textvariable=self.avatar_name_var, placeholder_text='DeskMate Name')
         a_entry.pack(side='left', fill='x', expand=True, padx=(0, 10))
         
-        rnd_btn = ctk.CTkButton(avatar_row, text='\ud083\udc12 Surprise Me', width=120, command=self._randomize_avatar_name)
+        rnd_btn = ctk.CTkButton(avatar_row, text='🎲 Surprise Me', width=120, command=self._randomize_avatar_name)
         rnd_btn.pack(side='right')
 
         # 4. Personality Tone
@@ -113,7 +113,7 @@ class OnboardingWindow(ctk.CTk):
             t_btn.pack(anchor='w', padx=15, pady=8)
 
         # 5. Live Preview Card
-        sec4_lbl = ctk.CTkLabel(scroll, text='\m2728 Live Message Preview', font=ctk.CTkFont(size=16, weight='bold'))
+        sec4_lbl = ctk.CTkLabel(scroll, text='✨ Live Message Preview', font=ctk.CTkFont(size=16, weight='bold'))
         sec4_lbl.pack(anchor='w', pady=(10, 8))
 
         self.preview_frame = ctk.CTkFrame(scroll, fg_color=('#2B2B2B', '#1E1E1E'), border_width=1, border_color='#3B8ED0')
@@ -131,7 +131,7 @@ class OnboardingWindow(ctk.CTk):
         # 6. Action Button
         submit_btn = ctk.CTkButton(
             scroll,
-            text='Save & Launch AI DeskMate \ud083\udc80',
+            text='Save & Launch AI DeskMate 🚀',
             font=ctk.CTkFont(size=15, weight='bold'),
             height=45,
             command=self._save_and_finish
@@ -159,7 +159,7 @@ class OnboardingWindow(ctk.CTk):
             avatar_name=a_name,
             minutes=90
         )
-        if hasttr(self, 'preview_label'):
+        if hasattr(self, 'preview_label'):
             self.preview_label.configure(text=f'"{sample}"')
 
     def _save_and_finish(self):
